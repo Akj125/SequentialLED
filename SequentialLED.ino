@@ -1,59 +1,28 @@
-int input = A0;
-int oldVal = 0;
-int lightLevel = 0;
-int oldLightLevel = 0;
+int input = A0; //Le signal analogique est lu sur la pin A0
+int nLED = 4; //Nombre de LED
+int premierPin = 2; //Première pin utilisée pour les LED
 
 
 void setup() {
     Serial.begin(115200);
-    pinMode(2, OUTPUT);
-    pinMode(3, OUTPUT);
-    pinMode(4, OUTPUT);
-    pinMode(5, OUTPUT);
-    lightLevel = analogRead(input) / 250;
-    oldLightLevel = lightLevel;
-    Serial.println("level " + (String)lightLevel);
+    //On initialise les pins en sortie
+    for (int i = premierPin; i < nLED + premierPin; i++)
+    {
+        pinMode(i, OUTPUT);
+    }
 }
 
 void loop() {
+    //On lit la valeur du signal analogique
     int val = analogRead(input);
-    if (val > 0 && val < 250)
-    {
-        lightLevel = 0;
-    }
-    else if (val > 250 && val < 500)
-    {
-        lightLevel = 1;
-    }
-    else if (val > 500 && val < 750)
-    {
-        lightLevel = 2;
-    }
-    else if (val > 750 && val < 1000)
-    {
-        lightLevel = 3;
-    }
-    else if (val > 1000)
-    {
-        lightLevel = 4;
-    }
 
-
-    if (lightLevel != oldLightLevel)
+    //On allume les LED en fonction de la valeur lue
+    for (int i = 0; i < nLED; i++)
     {
-        Serial.println("level " + (String)lightLevel);
-        oldLightLevel = lightLevel;
-    }
-    
-    for (int i = 2; i <= 5; i++)
-    {
-        if (i - 2 < lightLevel)
+        if (val < i*(1024/nLED))
         {
-            digitalWrite(i, HIGH);
+            digitalWrite((i + premierPin), HIGH);
         }
-        else
-        {
-            digitalWrite(i, LOW);
-        }
+        else digitalWrite((i + premierPin), LOW);
     }
 }
