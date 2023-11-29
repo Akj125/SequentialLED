@@ -19,10 +19,11 @@ void loop() {
     //On allume les LED en fonction de la valeur lue
     for (int i = 0; i < nLED; i++)
     {
-        if (val < i*(1024/nLED))
+        if (val <= i*(1024/nLED))
         {
-            digitalWrite((i + premierPin), HIGH);
+            digitalWrite((i + premierPin), LOW);
         }
-        else digitalWrite((i + premierPin), LOW);
+        else digitalWrite((i + premierPin), HIGH);
     }
+    Serial.println(val);
 }
